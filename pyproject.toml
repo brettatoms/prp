@@ -1,0 +1,14 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "prp"
+author = "Brett Adams"
+author-email = "brettadams@fastmail.com"
+classifiers = ["License :: OSI Approved :: MIT License"]
+
+[tool.prp]
+name = "prp"
+python_version = 3.6
+requirements_filename = "requirements.txt"
