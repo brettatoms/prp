@@ -7,8 +7,11 @@ module = "prp"
 author = "Brett Adams"
 author-email = "brettadams@fastmail.com"
 classifiers = ["License :: OSI Approved :: MIT License"]
+home-page = "https://github.com/brettatoms/prp"
 
 [tool.prp]
 name = "prp"
 python_version = 3.6
-requirements_filename = "requirements.txt"
+
+[tool.prp.aliases]
+prp_test = "python -c 'print(\"hello prp!\")'"

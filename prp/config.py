@@ -14,3 +14,8 @@ def _load_pyproject_toml():
 def get(key, default=None):
     config = _load_pyproject_toml()
     return config.get(key, default)
+
+
+def get_alias(name):
+    d = _load_pyproject_toml()
+    return d.get('aliases', {}).get(name, None)
