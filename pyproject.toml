@@ -8,7 +8,7 @@ author = "Brett Adams"
 author-email = "brettadams@fastmail.com"
 home-page = "https://github.com/brettatoms/prp"
 # requires-python = "3"
-# description-file = "README.md"
+description-file = "README.md"
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
