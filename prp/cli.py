@@ -1,57 +1,61 @@
 import os
-import subprocess
+import shlex
 import sys
-
-import click
+import venv
+from argparse import ArgumentParser, Namespace
+from subprocess import Popen
 
 from prp import config
 from prp import utils
 
 
-@click.group()
-def cli():
-    pass
+def parse_args(args=None) -> Namespace:
+    parser = ArgumentParser(description="Run a command in a virtualenv")
+    parser.add_argument(
+        "-v", "--venv", nargs="?", const="<print>", help="The virtualenv"
+    )
+    parser.add_argument("cmd", nargs="+", help="The command to run")
 
-
-@cli.command(context_settings=dict(
-    ignore_unknown_options=True,
-))
-@click.argument('command', nargs=-1, type=click.UNPROCESSED, required=True)
-def run(command):
-    """Run a command or alias."""
-
-    # TODO: pipenv uses app-name-{hash} where poetry uses a name based on the
-    # app name and version...seems like the poetry version could have conflicts
-    # if you're running the same thing at different paths
-    virtualenv_path = utils.get_virtualenv_path()
-
-    # if it doesn't exist then run pip install requirements.txt
-    # if it doesn't exist then run pip install requirements.txt
-    if not virtualenv_path.exists():
-        # create virtualenv
-        print(f'Creating {virtualenv_path}')
-        virtualenv_path.mkdir(parents=True)
-
-    # Add the virtualenv to PYTHONPATH
-    sys.path.insert(0, str(virtualenv_path))
-
-    # Add the virtualenv bin directory to PATH
-    os.environ['PATH'] = os.pathsep.join([
-        str(virtualenv_path.joinpath('bin')),
-        os.environ['PATH']
-    ])
-
-    # Run the command
-    command_name = command[0]
-    alias = config.get_alias(command_name)
-    if alias is not None:
-        command = alias + ' '.join(command[1:])
-    subprocess.run(command, shell=True)
+    return parser.parse_args()
 
 
 def main():
-    cli(prog_name='prp')
+    args = parse_args()
+    print(args)
+    cmd = args.cmd
+
+    cmd_name = cmd[0]
+    alias = config.get_alias(cmd_name)
+    if alias is not None:
+        cmd = shlex.split(alias) + cmd[1:]
+
+    if args.venv == "<print>":
+        venv_path = utils.get_virtualenv_path()
+        print(venv_path)
+    elif args.venv is not None:
+        if os.path.exists(args.venv):
+            venv_path = args.venv
+        else:
+            venv_path = utils.get_virtualenv_path()
+    else:
+        venv_path = utils.get_virtualenv_path()
+
+    if not venv_path.exists():
+        print(f"Creating {venv_path}")
+        venv.EnvBuilder(with_pip=True).create(venv_path)
+
+    # Add the virtualenv to PYTHONPATH
+    sys.path.insert(0, str(venv_path))
+
+    # Add the virtualenv bin directory to PATH
+    os.environ["PATH"] = os.pathsep.join(
+        [str(venv_path.joinpath("bin")), os.environ["PATH"]]
+    )
+
+    with Popen(cmd, bufsize=0, universal_newlines=True):
+        # print to flush buffers and get a new command promp
+        print("", end="")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
