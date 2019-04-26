@@ -15,7 +15,13 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
+requires-python = ">=3.5,<=4.0a0"
+requires = [
+    "toml == 0.10.0"
+]
 
+[tool.flit.scripts]
+prp = "prp:main"
 
 [tool.prp]
 name = "prp"
