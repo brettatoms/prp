@@ -21,7 +21,6 @@ def parse_args(args=None) -> Namespace:
 
 def main():
     args = parse_args()
-    print(args)
     cmd = args.cmd
 
     cmd_name = cmd[0]
@@ -42,7 +41,7 @@ def main():
 
     if not venv_path.exists():
         print(f"Creating {venv_path}")
-        venv.EnvBuilder(with_pip=True).create(venv_path)
+        venv.create(venv_path, with_pip=True)
 
     # Add the virtualenv to PYTHONPATH
     sys.path.insert(0, str(venv_path))
