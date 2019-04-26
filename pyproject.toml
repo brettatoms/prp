@@ -7,7 +7,6 @@ module = "prp"
 author = "Brett Adams"
 author-email = "brettadams@fastmail.com"
 home-page = "https://github.com/brettatoms/prp"
-# requires-python = "3"
 description-file = "README.md"
 classifiers = [
     "Intended Audience :: Developers",
@@ -21,7 +20,7 @@ requires = [
 ]
 
 [tool.flit.scripts]
-prp = "prp:main"
+prp = "prp.cli:main"
 
 [tool.prp]
 name = "prp"

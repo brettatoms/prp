@@ -10,7 +10,7 @@ from prp import utils
 
 
 def parse_args(args=None) -> Namespace:
-    parser = ArgumentParser(description="Run a command in a virtualenv")
+    parser = ArgumentParser("prp", description="Run a command in a virtualenv")
     parser.add_argument(
         "-v", "--venv", nargs="?", const="<print>", help="The virtualenv"
     )
